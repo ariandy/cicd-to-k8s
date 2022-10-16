@@ -1,0 +1,79 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cilist-fe-configmap
+  namespace: devops-ariandy
+data:
+  REACT_APP_BACKEND_URL : "https://kube.ariandy.com/be"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: cilist-fe-service
+  namespace: devops-ariandy
+spec:
+  selector:
+    app: cilist
+    tier: frontend
+  type: NodePort
+  ports:
+  - protocol: TCP
+    nodePort: 30002
+    port: 3000
+    targetPort: 3000
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cilist-fe
+  namespace: devops-ariandy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cilist
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: cilist
+        tier: frontend
+    spec:
+      containers:
+      - name: cilist-fe-container
+        image: ooxyz/x-fe:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: REACT_APP_BACKEND_URL
+          valueFrom:
+            configMapKeyRef:
+              name: cilist-fe-configmap
+              key: REACT_APP_BACKEND_URL
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: devops-ariandy
+  name: cilist-ingress-fe
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: kube.ariandy.com
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: cilist-fe-service
+              port:
+                number: 3000
