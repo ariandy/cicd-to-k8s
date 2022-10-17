@@ -12,6 +12,7 @@ pipeline {
                 echo 'Hello World'
                 sh 'hostname'
                 sh 'docker version'
+                sh 'ls'
             }
         }
         
