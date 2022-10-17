@@ -3,6 +3,7 @@ pipeline {
     
     environment{
         REGISTRY_CRED=credentials('dockerhub')
+        GIT_COMMIT_SHORT = sh(returnStdout: true, script: '''echo $GIT_COMMIT | head -c 7''')
     }
     
     stages {
@@ -17,8 +18,9 @@ pipeline {
         stage('BUILD') {
             steps {
                 sh 'echo $REGISTRY_CRED_PSW | docker login -u $REGISTRY_CRED_USR --password-stdin'
-                docker build -f Dockerfile.be -t ooxyz/cilist:latest-be
-                docker build -f Dockerfile.fe -t ooxyz/cilist:latest-fe
+                sh 'docker build Dockerfile.be -t cilist-pipeline-be:$GIT_COMMIT_SHORT'
+                sh 'docker tag cilist-pipeline-be:$GIT_COMMIT_SHORT ooxyz/cilist-pipeline-be:$GIT_COMMIT_SHORT'
+                sh 'docker push ooxyz/cilist-pipeline-be:$GIT_COMMIT_SHORT'
             }
         }
     }
