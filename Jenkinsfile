@@ -29,6 +29,13 @@ pipeline {
             }
         }
 
+        stage('TEST') {
+            steps {
+                sh 'docker run aquasec/trivy image ooxyz/x-be:$GIT_COMMIT_SHORT'
+                sh 'docker run aquasec/trivy image ooxyz/x-fe:$GIT_COMMIT_SHORT'
+            }
+        }
+
         stage('DEPLOY') {
             steps {
                 sh 'docker push ooxyz/x-be:$GIT_COMMIT_SHORT'
