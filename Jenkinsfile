@@ -13,6 +13,7 @@ pipeline {
                 sh 'hostname'
                 sh 'docker version'
                 sh 'aws --version'
+                sh 'helm version'
             }
         }
         
