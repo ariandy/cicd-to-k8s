@@ -19,22 +19,22 @@ pipeline {
             steps {
                 sh 'echo $REGISTRY_CRED_PSW | docker login -u $REGISTRY_CRED_USR --password-stdin'
 
-                sh 'docker build ./backend -t cilist-pipeline-be:$GIT_COMMIT_SHORT'
-                sh 'docker tag cilist-pipeline-be:$GIT_COMMIT_SHORT ooxyz/cilist-pipeline-be:$GIT_COMMIT_SHORT'
-                sh 'docker tag cilist-pipeline-be:$GIT_COMMIT_SHORT ooxyz/cilist-pipeline-be:latest'
+                sh 'docker build ./backend -t x-be:$GIT_COMMIT_SHORT'
+                sh 'docker tag x-be:$GIT_COMMIT_SHORT ooxyz/x-be:$GIT_COMMIT_SHORT'
+                sh 'docker tag x-be:$GIT_COMMIT_SHORT ooxyz/x-be:latest'
 
-                sh 'docker build ./frontend -t cilist-pipeline-fe:$GIT_COMMIT_SHORT'
-                sh 'docker tag cilist-pipeline-fe:$GIT_COMMIT_SHORT ooxyz/cilist-pipeline-fe:$GIT_COMMIT_SHORT'
-                sh 'docker tag cilist-pipeline-fe:$GIT_COMMIT_SHORT ooxyz/cilist-pipeline-fe:latest'
+                sh 'docker build ./frontend -t x-fe:$GIT_COMMIT_SHORT'
+                sh 'docker tag x-fe:$GIT_COMMIT_SHORT ooxyz/x-fe:$GIT_COMMIT_SHORT'
+                sh 'docker tag x-fe:$GIT_COMMIT_SHORT ooxyz/x-fe:latest'
             }
         }
 
         stage('DEPLOY') {
             steps {
-                sh 'docker push ooxyz/cilist-pipeline-be:$GIT_COMMIT_SHORT'
-                sh 'docker push ooxyz/cilist-pipeline-be:latest'
-                sh 'docker push ooxyz/cilist-pipeline-fe:$GIT_COMMIT_SHORT'
-                sh 'docker push ooxyz/cilist-pipeline-fe:latest'
+                sh 'docker push ooxyz/x-be:$GIT_COMMIT_SHORT'
+                sh 'docker push ooxyz/x-be:latest'
+                sh 'docker push ooxyz/x-fe:$GIT_COMMIT_SHORT'
+                sh 'docker push ooxyz/x-fe:latest'
             }
         }
     }
