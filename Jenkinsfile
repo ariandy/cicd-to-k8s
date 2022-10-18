@@ -27,10 +27,6 @@ pipeline {
                 sh 'docker build ./frontend -t x-fe:$GIT_COMMIT_SHORT'
                 sh 'docker tag x-fe:$GIT_COMMIT_SHORT ooxyz/x-fe:$GIT_COMMIT_SHORT'
                 sh 'docker tag x-fe:$GIT_COMMIT_SHORT ooxyz/x-fe:latest'
-
-                withAWS(credentials: 'jenkins-aws-key', region: 'us-ewest-2') {
-                    sh 'aws iam get-user'
-                }
             }
         }
 
@@ -47,6 +43,10 @@ pipeline {
                 sh 'docker push ooxyz/x-be:latest'
                 sh 'docker push ooxyz/x-fe:$GIT_COMMIT_SHORT'
                 sh 'docker push ooxyz/x-fe:latest'
+
+                withAWS(credentials: 'jenkins-aws-key', region: 'us-west-2') {
+                    sh 'aws iam get-user'
+                }
             }
         }
     }
