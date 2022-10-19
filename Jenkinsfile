@@ -47,8 +47,10 @@ pipeline {
                 sh 'docker push ooxyz/x-fe:latest'
 
                 withAWS(credentials: 'jenkins-aws-key', region: 'us-west-2') {
-                    sh 'aws iam get-user'
-                    sh 'kubectl version --short --client'
+                    sh 'aws configure set default.region us-west-2'
+                    sh 'aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID'
+                    sh 'aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY'
+                    sh 'helm version'
                 }
             }
         }
