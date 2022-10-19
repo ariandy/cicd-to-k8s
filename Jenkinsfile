@@ -50,7 +50,7 @@ pipeline {
                     sh 'aws configure set default.region us-west-2'
                     sh 'aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID'
                     sh 'aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY'
-                    sh 'helm version'
+                    sh 'helm upgrade ariandy helm-manifest/'
                 }
             }
         }
