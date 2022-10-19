@@ -1,0 +1,56 @@
+namespace: devops-ariandy
+
+label:
+  app: cilist
+  tier:
+    be: backend
+    fe: frontend
+
+secret:
+  name: cilist-secret
+  type: Opaque
+  data:
+    username: cGVvcGxl
+    password: czNrMGw0aGQzdjBwNQ==
+
+configmap:
+  name:
+    be: cilist-be-configmap
+    fe: cilist-fe-configmap
+
+service:
+  name:
+    be: cilist-be-service
+    fe: cilist-fe-service
+  protocol: TCP
+
+deployment:
+  name:
+    be: cilist-be
+    fe: cilist-fe
+  replicas:
+    be: 2
+    fe: 2
+
+ingress:
+  name:
+    be: cilist-be-ingress
+    fe: cilist-fe-ingress
+  className: nginx
+
+container:
+  name:
+    be: cilist-be-container
+    fe: cilist-fe-container
+  image:
+    be: ooxyz/x-be:latest
+    fe: ooxyz/x-fe:latest
+
+port:
+  be: 5000
+  fe: 3000
+  mysql: 3306
+
+host:
+  route53: kube.ariandy.com
+  rds: ariandy-db-instance.c8bo20yarupg.us-west-2.rds.amazonaws.com

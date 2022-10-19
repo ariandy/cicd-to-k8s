@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployment.name.be }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.deployment.replicas.be }}
+  selector:
+    matchLabels:
+      app: {{ .Values.label.app }}
+      tier: {{ .Values.label.tier.be }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.label.app }}
+        tier: {{ .Values.label.tier.be }}
+    spec:
+      containers:
+      - name: {{ .Values.container.name.be }}
+        image: {{ .Values.container.image.be }}
+        ports:
+        - containerPort: {{ .Values.port.be }}
+        env:
+        - name: BASE_URL_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: {{ .Values.configmap.name.be }}
+              key: BASE_URL_PORT
+        - name: DATABASE_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: {{ .Values.configmap.name.be }}
+              key: DATABASE_PORT
+        - name: DATABASE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secret.name }}
+              key: DATABASE_USERNAME
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secret.name }}
+              key: DATABASE_PASSWORD
+        - name: DATABASE_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: {{ .Values.configmap.name.be }}
+              key: DATABASE_HOST
+        - name: DATABASE_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: {{ .Values.configmap.name.be }}
+              key: DATABASE_DATABASE
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployment.name.fe }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.deployment.replicas.be }}
+  selector:
+    matchLabels:
+      app: {{ .Values.label.app }}
+      tier: {{ .Values.label.tier.fe }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.label.app }}
+        tier: {{ .Values.label.tier.fe }}
+    spec:
+      containers:
+      - name: {{ .Values.container.name.fe }}
+        image: {{ .Values.container.image.fe }}
+        ports:
+        - containerPort: {{ .Values.port.fe }}
+        env:
+        - name: REACT_APP_BACKEND_URL
+          valueFrom:
+            configMapKeyRef:
+              name: {{ .Values.configmap.name.fe }}
+              key: REACT_APP_BACKEND_URL

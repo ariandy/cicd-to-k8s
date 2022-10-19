@@ -1,0 +1,43 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: {{ .Values.ingress.name.fe }}
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: {{ .Values.ingress.className }}
+  rules:
+    - host: {{ .Values.host.route53 }}
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: {{ .Values.service.name.fe }}
+              port:
+                number: {{ .Values.port.fe }}
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: {{ .Values.ingress.name.be }}
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: {{ .Values.ingress.className }}
+  rules:
+    - host: {{ .Values.host.route53 }}
+      http:
+        paths:
+        - path: /be(/|$)(.*)
+          pathType: Prefix
+          backend:
+            service:
+              name: {{ .Values.service.name.be }}
+              port:
+                number: {{ .Values.port.be }}

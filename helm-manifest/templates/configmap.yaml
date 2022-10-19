@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.configmap.name.be }}
+  namespace: {{ .Values.namespace }}
+data:
+  BASE_URL_PORT : {{ .Values.port.be | quote }}
+  DATABASE_DATABASE : "people"
+  DATABASE_HOST : {{ .Values.host.rds | quote }}
+  DATABASE_PORT : {{ .Values.port.mysql | quote }}
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.configmap.name.fe }}
+  namespace: {{ .Values.namespace }}
+data:
+  REACT_APP_BACKEND_URL : "https://kube.ariandy.com/be"
