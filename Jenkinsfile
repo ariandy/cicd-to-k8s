@@ -14,7 +14,6 @@ pipeline {
                 sh 'docker version'
                 sh 'aws --version'
                 sh 'helm version'
-                sh 'kubectl version --short --client'
                 sh 'eksctl version'
             }
         }
@@ -49,6 +48,7 @@ pipeline {
 
                 withAWS(credentials: 'jenkins-aws-key', region: 'us-west-2') {
                     sh 'aws iam get-user'
+                    sh 'kubectl version --short --client'
                 }
             }
         }
