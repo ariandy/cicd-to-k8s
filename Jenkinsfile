@@ -14,6 +14,8 @@ pipeline {
                 sh 'docker version'
                 sh 'aws --version'
                 sh 'helm version'
+                sh 'kubectl version --short --client'
+                sh 'eksctl version'
             }
         }
         
