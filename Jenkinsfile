@@ -14,7 +14,6 @@ pipeline {
                 sh 'docker version'
                 sh 'aws --version'
                 sh 'helm version'
-                sh 'kubectl version --short'
                 sh 'eksctl version'
             }
         }
@@ -48,6 +47,7 @@ pipeline {
                 sh 'docker push ooxyz/x-fe:latest'
 
                 withAWS(credentials: 'jenkins-aws-key', region: 'us-west-2') {
+                    sh 'kubectl version --short'
                     sh 'aws configure set default.region us-west-2'
                     sh 'aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID'
                     sh 'aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY'
