@@ -52,8 +52,8 @@ pipeline {
                     sh 'aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY'
                     sh 'aws eks update-kubeconfig --name=ariandy'
                     sh 'kubectl version --short'
-                    // sh 'helm upgrade --set container.image.be=$GIT_COMMIT_SHORT,container.image.fe=$GIT_COMMIT_SHORT ariandy helm-manifest/'
-                    sh 'helm upgrade ariandy helm-manifest/ --dry-run --debug'
+                    sh 'helm upgrade --set container.image.be=ooxyz/x-be:$GIT_COMMIT_SHORT,container.image.fe=ooxyz/x-fe:$GIT_COMMIT_SHORT ariandy helm-manifest/ --dry-run --debug'
+                    // sh 'helm upgrade ariandy helm-manifest/'
                 }
             }
         }
