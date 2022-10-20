@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent {label "aws.ec2.us.west.jenkins.worker"}
     
     environment{
         REGISTRY_CRED=credentials('dockerhub')
