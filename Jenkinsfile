@@ -1,5 +1,5 @@
 pipeline {
-    agent {label "aws.ec2.us.west.jenkins.worker"}
+    agent any
     
     environment{
         REGISTRY_CRED=credentials('dockerhub')
@@ -32,12 +32,12 @@ pipeline {
             }
         }
 
-        // stage('TEST') {
-        //     steps {
-        //         sh 'docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image ooxyz/x-be:$GIT_COMMIT_SHORT'
-        //         sh 'docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image ooxyz/x-fe:$GIT_COMMIT_SHORT'
-        //     }
-        // }
+        stage('TEST') {
+            steps {
+                sh 'docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image ooxyz/x-be:$GIT_COMMIT_SHORT'
+                sh 'docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image ooxyz/x-fe:$GIT_COMMIT_SHORT'
+            }
+        }
 
         stage('DEPLOY') {
             steps {
