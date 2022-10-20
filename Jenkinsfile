@@ -32,12 +32,12 @@ pipeline {
             }
         }
 
-        stage('TEST') {
-            steps {
-                sh 'docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image ooxyz/x-be:$GIT_COMMIT_SHORT'
-                sh 'docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image ooxyz/x-fe:$GIT_COMMIT_SHORT'
-            }
-        }
+        // stage('TEST') {
+        //     steps {
+        //         sh 'docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image ooxyz/x-be:$GIT_COMMIT_SHORT'
+        //         sh 'docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image ooxyz/x-fe:$GIT_COMMIT_SHORT'
+        //     }
+        // }
 
         stage('DEPLOY') {
             steps {
@@ -52,8 +52,8 @@ pipeline {
                     sh 'aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY'
                     sh 'aws eks update-kubeconfig --name=ariandy'
                     sh 'kubectl version --short'
-                    sh 'helm upgrade --set container.image.be=$GIT_COMMIT_SHORT,container.image.fe=$GIT_COMMIT_SHORT ariandy helm-manifest/'
-                    // sh 'helm upgrade ariandy helm-manifest/'
+                    // sh 'helm upgrade --set container.image.be=$GIT_COMMIT_SHORT,container.image.fe=$GIT_COMMIT_SHORT ariandy helm-manifest/'
+                    sh 'helm upgrade ariandy helm-manifest/ --dry-run --debug'
                 }
             }
         }
