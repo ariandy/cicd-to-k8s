@@ -14,6 +14,7 @@ pipeline {
                 sh 'docker version'
                 sh 'aws --version'
                 sh 'helm version'
+                sh 'kubectl version --short'
                 sh 'eksctl version'
             }
         }
@@ -51,9 +52,8 @@ pipeline {
                     sh 'aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID'
                     sh 'aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY'
                     sh 'aws eks update-kubeconfig --name=ariandy'
-                    sh 'kubectl version --short'
-                    sh 'helm --set container.image.be=$GIT_COMMIT_SHORT, container.image.fe=$GIT_COMMIT_SHORT'
-                    sh 'helm upgrade ariandy helm-manifest/'
+                    sh 'helm upgrade --set container.image.be=$GIT_COMMIT_SHORT,container.image.fe=$GIT_COMMIT_SHORT ariandy helm-manifest/'
+                    // sh 'helm upgrade ariandy helm-manifest/'
                 }
             }
         }
