@@ -7,7 +7,7 @@ pipeline {
     }
     
     stages {
-        stage('Hello') {
+        stage('INIT') {
             steps {
                 echo 'Hello World'
                 sh 'hostname'
