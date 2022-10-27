@@ -1,0 +1,1 @@
+eksctl create cluster --name=ariandy --nodes=1 --node-type=t2.xlarge
